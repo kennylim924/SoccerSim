@@ -8,12 +8,15 @@
  if (empty($_POST)) 
  {	
 	viewTeams();
-	viewPlayers();
+	##viewPlayers();
  } // end if 
- else if (empty($_POST['Submit_Team']))
+ else if ($_POST['Submit_Team'])
  {
  	viewPlayers();
  } // end else if
+ printDocFooter();
+
+ //-----------------FUNCTIONS-------------------//
 
  function viewTeams()
  {
