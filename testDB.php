@@ -23,7 +23,7 @@
  	print "<div class = 'content'>\n";
  	print "<h1> Select Teams </h1>\n";
  	print "<div class = 'content2'>\n";	
-	print "<form method = 'post' enctype = 'multipart/form-data' action = '".$_SERVER ['PHP_SELF']."'>\n";
+	print "<form method = 'post' action = '".$_SERVER ['PHP_SELF']."'>\n";
 	print "<p><select name = 'Teams'>\n";
 	$db = adodbConnect();
 	$query = "select * from Teams";
@@ -48,7 +48,7 @@
  	print "<div class = 'content'>\n";
  	print "<h1> View Players </h1>\n";
  	print "<div class = 'content2'>\n";	
-	print "<form method = 'post' enctype = 'multipart/form-data' action = '".$_SERVER ['PHP_SELF']."'>\n";
+	print "<form method = 'post' action = '".$_SERVER ['PHP_SELF']."'>\n";
 	print "<p><select name = 'Player'>\n";
 	$db = adodbConnect();
 	$query = "select * from Player";
@@ -58,7 +58,7 @@
 		$player = $row['Player_ID'];
 		$name = $row['Name'];
 		$pos = $row['Position'];
-		print "<option value = '$player'>"."$name"."$pos</option>";
+		print "<option value = '$player'>"."$name"."&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp$pos</option>";
 	}// end while
 	print "</select>\n";
 	print "</p>\n";
