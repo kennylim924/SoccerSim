@@ -17,11 +17,13 @@
  if ($_POST['Submit_Team'])
  {
 	$team = $_POST['Teams'];
-	viewPlayers($team);
+	$team2 = $_POST['Teams2'];
+	viewPlayers($team, $team2);
  } // end if
  if ($_POST['Submit_Players'])
  {
  	$team = $_POST['Players'];
+ 	$team2 = $_POST['Players'];
  	teamStats($team);
  } // end if 
  printDocFooter();
@@ -73,7 +75,7 @@
 	print "</p>\n";
 	print "</div>\n";
 	print "<div class = 'content_right'>\n";	
-	print "<p><select name = 'Teams'>\n";
+	print "<p><select name = 'Teams2'>";
 	$db = adodbConnect();
 	// if connection to database is not valid, print this message
 	if(!$db)
@@ -81,30 +83,31 @@
 		print "Failed attempt: No connection to Database\n";
 		return;
 	} // end if
-	$query = "select * from Teams order by Team_Name asc";
-	$result = $db -> Execute($query);
+	$query2 = "select * from Teams order by Team_Name asc";
+	$result = $db -> Execute($query2);
 	while ($row = $result -> FetchRow())
 	{
-		$team = $row['Team_ID'];
-		$desc = $row['Team_Name'];
-		print "<option value = '$team'>"."$desc</option>";
+		$team2 = $row['Team_ID'];
+		$desc2 = $row['Team_Name'];
+		print "<option value = '$team2'>"."$desc2</option>";
 	}// end while
-	print "</select>\n";
-	print "</p>\n";
-	print "</form>";
+	print "</select>";
+	print "</p>";
 	print "</div>";
-	print "<div class = 'button_submit'>\n";
+	print "<div class = 'button_submit'>";
 	print "<input type = 'submit' value = 'Submit' name = 'Submit_Team'/>\n";
 	print "</div>\n";
+	print "</form>";
 	print "</div>";
 	print "</div>";
  } // end viewTeams()
 
- function viewPlayers($team)
+ function viewPlayers($team, $team2)
  {
  	print "<div class = 'content'>\n";
  	print "<h1> View Players </h1>\n";
  	print "<div class = 'content2'>\n";	
+ 	print "<div class = 'content_left'>\n";
 	print "<form method = 'post' enctype = 'multipart/form-data' action = '".$_SERVER ['PHP_SELF']."'>\n";
 	print "<p><select name = 'Players'>\n";
 	$db = adodbConnect();
@@ -127,9 +130,32 @@
 	}// end while
 	print "</select>\n";
 	print "</p>\n";
-	print "<p><input type = 'submit' value = 'Continue' name = 'Submit_Players'/>\n";
-	print "</p>\n";
-	print "</form>\n";
+	print "<input type = 'submit' value = 'Continue' name = 'Submit_Players'>";
+	print "</div>\n";
+	print "<div class = 'content_right'>\n";
+	print "<p><select name = 'Players'>";
+	$db = adodbConnect();
+	// if connection to database is not valid, print this message
+	if(!$db)
+	{
+		print "Failed attempt: No connection to Database\n";
+		return;
+	} // end if
+	$query2 = "select * from Players where Team_ID = '$team2'";
+	$result = $db -> Execute($query2);
+	while ($row = $result -> FetchRow())
+	{
+		$team2 = $row['Team_ID'];
+		$player2 = $row['Player_ID'];
+		$name2 = $row['Name'];
+		$pos2 = $row['Position'];
+		$rating2 = $row['Rating'];
+		print "<option value = '$team2'>".$player2."&nbsp&nbsp&nbsp".$name2."&nbsp&nbsp".$pos2."&nbsp&nbsp&nbsp&nbsp$rating2</option>";
+	}// end while
+	print "</select>";
+	print "</p>";
+	print "</div>";
+	print "</form>";
 	print "</div>";
 	print "</div>";
  } // end viewPlayers()
