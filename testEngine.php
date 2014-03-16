@@ -71,12 +71,8 @@
 	}// end while
 	print "</select>\n";
 	print "</p>\n";
-	print "<p><input type = 'submit' value = 'Submit' name = 'Submit_Team'/>\n";
-	print "</p>\n";
-	print "</form>\n";
 	print "</div>\n";
 	print "<div class = 'content_right'>\n";	
-	print "<form method = 'post' enctype = 'multipart/form-data' action = '".$_SERVER ['PHP_SELF']."'>\n";
 	print "<p><select name = 'Teams'>\n";
 	$db = adodbConnect();
 	// if connection to database is not valid, print this message
@@ -95,9 +91,10 @@
 	}// end while
 	print "</select>\n";
 	print "</p>\n";
-	print "<p><input type = 'submit' value = 'Submit' name = 'Submit_Team'/>\n";
-	print "</p>\n";
-	print "</form>\n";
+	print "</form>";
+	print "</div>";
+	print "<div class = 'button_submit'>\n";
+	print "<input type = 'submit' value = 'Submit' name = 'Submit_Team'/>\n";
 	print "</div>\n";
 	print "</div>";
 	print "</div>";
