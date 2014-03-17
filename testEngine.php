@@ -31,6 +31,10 @@
  {
 	playGame();
  }
+ else if ($_POST['Home'])
+ {
+ 	viewPage();
+ } // end else if
  printDocFooter();
 
  //---------------------------Functions------------------------//
@@ -289,6 +293,7 @@
  	print "</br>\n";
  	print "</br>\n";
  	print "</br>\n";
+ 	print "</br>\n";
  	print "<div class = 'button_submit'>\n";
  	print "<p><input type = 'submit' value = 'Continue' name = 'Team_Stats_Cont'/>\n";
 	print "</p>\n";
@@ -303,7 +308,6 @@
  	print "<div class = 'content'>\n";
  	print "<h1> Game Session </h1>\n";
  	print "<div class = 'content_game_session'>\n";
- 	print "<form method = 'post' enctype = 'multipart/form-data' action = '".$_SERVER ['PHP_SELF']."'>\n";
  	print "<p>Game is now playing...\n";
  	print "</p>\n";
  	$minutes = range("1", "45", 3);
@@ -315,9 +319,12 @@
  		print_r($minute.'min'.' '.'-'.' '.$event[array_rand($event)]."\n");
  		print '</pre>';
  	} // end foreach loop
- 	
- 	#print "Minute Blah - ".$event[7];
  	print "</div>";
+ 	print "<form method = 'post' enctype = 'multipart/form-data' action = '".$_SERVER ['PHP_SELF']."'>\n";
+ 	print "<div class = 'button_submit'>\n";
+ 	print "<p><input type = 'submit' value = 'Go Home' name = 'Home'/>\n";
+	print "</p>\n";
+	print "</div>\n";
  	print "</form>\n";
  	print "</div>";
  	print "</div>";
