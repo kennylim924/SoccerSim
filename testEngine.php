@@ -302,10 +302,22 @@
  {
  	print "<div class = 'content'>\n";
  	print "<h1> Game Session </h1>\n";
- 	print "<div class = 'content2'>\n";
+ 	print "<div class = 'content_game_session'>\n";
  	print "<form method = 'post' enctype = 'multipart/form-data' action = '".$_SERVER ['PHP_SELF']."'>\n";
- 	print "<p>Game is now playing\n";
+ 	print "<p>Game is now playing...\n";
  	print "</p>\n";
+ 	$minutes = range("1", "45", 3);
+ 	foreach ($minutes as $minute) 
+ 	{
+ 		$event = array("Goal!", "Yellow Card", "Uh-Oh: 2nd Yellow equals a Red", "Red Card", "Penalty: Goal!", "Penalty: Miss!",
+ 		"TeamA has possession", "TeamB has possession");
+ 		print '<pre>'; #<pre></pre> confuses browser to print array line by line
+ 		print_r($minute.'min'.' '.'-'.' '.$event[array_rand($event)]."\n");
+ 		print '</pre>';
+ 	} // end foreach loop
+ 	
+ 	#print "Minute Blah - ".$event[7];
+ 	print "</div>";
  	print "</form>\n";
  	print "</div>";
  	print "</div>";
