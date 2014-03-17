@@ -1,4 +1,5 @@
 <?php
+ //---------------Document heading , style sheet, title--------------//
  require "classfun.php";   # gets functions we will use
  require "mydb.php"; # gets function we will use to connect to database
  ## call a method to output the document's page heading
@@ -7,8 +8,8 @@
  ## if nothing has been posted to the page (first time page is being loaded)
  if (empty($_POST)) 
  {	
- 	#viewTeams();
-	displayTime();
+ 	viewPage();
+	#displayTime();
  }
  if ($_POST['Submit_Game'])
  {
@@ -23,10 +24,16 @@
  if ($_POST['Submit_Players'])
  {
  	$team = $_POST['Players'];
- 	$team2 = $_POST['Players'];
- 	teamStats($team);
+ 	$team2 = $_POST['Players2'];
+ 	teamStats($team, $team2);
  } // end if 
+ if ($_POST['Team_Stats_Cont'])
+ {
+	playGame();
+ }
  printDocFooter();
+
+ //---------------------------Functions------------------------//
 
  function displayTime()
  {
@@ -48,6 +55,24 @@
 	print "</div>";
  } // end function displayTime()
  
+ // function will display home page along with an image
+ function viewPage()
+ {
+ 	print "<div class = 'content'>\n";
+ 	print "<h1> Welcome to SoccerSim! </h1>\n";
+ 	$image = "greenSoccerPitch.png";
+ 	$width = 640;
+ 	$height = 360;
+ 	echo '<p><img src ="'.$image.'" style = width:"'.$width.'px;height:'.$height.'px;"></p>';
+ 	print "<form method = 'post' enctype = 'multipart/form-data' action = '".$_SERVER ['PHP_SELF']."'>\n"; 
+ 	print "<p><input type = 'submit' value = 'Play' name = 'Submit_Game'/>\n"; 
+	print "</p>\n";
+	print "</form>\n";
+	print "</div>\n"; 
+ } // end viewPage()
+
+ // function called after 'Play' button is pushed
+ // will query the database to populate teams 
  function viewTeams()
  {
  	print "<div class = 'content'>\n";
@@ -74,6 +99,9 @@
 	print "</select>\n";
 	print "</p>\n";
 	print "</div>\n";
+
+	//---------------Query databse for 2nd team---------------//
+
 	print "<div class = 'content_right'>\n";	
 	print "<p><select name = 'Teams2'>";
 	$db = adodbConnect();
@@ -94,6 +122,8 @@
 	print "</select>";
 	print "</p>";
 	print "</div>";
+	print "</br>\n";
+	print "</br>\n";
 	print "<div class = 'button_submit'>";
 	print "<input type = 'submit' value = 'Submit' name = 'Submit_Team'/>\n";
 	print "</div>\n";
@@ -102,12 +132,15 @@
 	print "</div>";
  } // end viewTeams()
 
+ // function is called after teams are selected
+ // variables $team and $team2 are passed to this function from viewTeams() 
+ // variables determine which team is selected in order to populate the players for specific team
  function viewPlayers($team, $team2)
  {
  	print "<div class = 'content'>\n";
  	print "<h1> View Players </h1>\n";
- 	print "<div class = 'content2'>\n";	
- 	print "<div class = 'content_left'>\n";
+ 	print "<div class = 'content_players'>\n";	
+ 	print "<div class = 'content_left2'>\n";
 	print "<form method = 'post' enctype = 'multipart/form-data' action = '".$_SERVER ['PHP_SELF']."'>\n";
 	print "<p><select name = 'Players'>\n";
 	$db = adodbConnect();
@@ -130,10 +163,12 @@
 	}// end while
 	print "</select>\n";
 	print "</p>\n";
-	print "<input type = 'submit' value = 'Continue' name = 'Submit_Players'>";
 	print "</div>\n";
-	print "<div class = 'content_right'>\n";
-	print "<p><select name = 'Players'>";
+
+	//----------------------Query Database for 2nd team players-----------------//
+
+	print "<div class = 'content_right2'>\n";
+	print "<p><select name = 'Players2'>\n";
 	$db = adodbConnect();
 	// if connection to database is not valid, print this message
 	if(!$db)
@@ -155,21 +190,32 @@
 	print "</select>";
 	print "</p>";
 	print "</div>";
+	print "</br>\n";
+	print "</br>\n";
+	print "<div class = 'button_submit2'>";
+	print "<p><input type = 'submit' value = 'Continue' name = 'Submit_Players'/>";
+	print "</p>\n";
+	print "</div>\n";
 	print "</form>";
 	print "</div>";
 	print "</div>";
  } // end viewPlayers()
 
- function teamStats($team)
+ // function is called after continuing from viewPlayers() page
+ // function is pased $team and $team variable as well
+ // the variables determine the teams selected and alows for calculation of avgerages for specific team
+ // averages include: defense, attacking, along with GK
+ function teamStats($team, $team2)
  {
  	print "<div class = 'content'>\n";
  	print "<h1> Team Stats </h1>\n";
- 	print "<div class = 'content2'>\n";
+ 	print "<div class = 'content_stats'>\n";
+ 	print "<div class = 'content_left2'>\n";
  	print "<form method = 'post' enctype = 'multipart/form-data' action = '".$_SERVER ['PHP_SELF']."'>\n";
  	$db = adodbConnect();
  	// query the DB for the 'DEF' enum
- 	$query = "select AVG(Rating) from Players where Team_ID = '$team' and Position = 'DEF'";
- 	$result = $db -> Execute($query);
+ 	$queryD = "select AVG(Rating) from Players where Team_ID = '$team' and Position = 'DEF'";
+ 	$result = $db -> Execute($queryD);
  	while ($row = $result -> FetchRow())
  	{
  		$avgRate_D = $row['AVG(Rating)'];
@@ -180,8 +226,8 @@
  	print "<p>\n";
  	print "</p>\n";
  	// query the DB for the 'ATT' enum
- 	$query2 = "select AVG(Rating) from Players where Team_ID = '$team' and Position = 'ATT'";
- 	$result = $db -> Execute($query2);
+ 	$queryA = "select AVG(Rating) from Players where Team_ID = '$team' and Position = 'ATT'";
+ 	$result = $db -> Execute($queryA);
  	while ($row = $result -> FetchRow())
  	{
  		$avgRate_A = $row['AVG(Rating)'];
@@ -192,17 +238,76 @@
  	print "<p>\n";
  	print "</p>\n";
  	// query the DB for 'GK' enum
- 	$query3 = "select Rating from Players where Team_ID = '$team' and Position = 'GK'";
- 	$result = $db -> Execute($query3);
+ 	$queryG = "select Rating from Players where Team_ID = '$team' and Position = 'GK'";
+ 	$result = $db -> Execute($queryG);
  	while ($row = $result -> FetchRow())
  	{
  		$avgRate_G = $row['Rating'];
  		print "Goalkeeper: ";
  		print $avgRate_G + 0;  
  	} // end while
+ 	print "</div>\n";
+
+ 	//------------------2nd set of queries for 2nd team--------------//
+
+ 	print "<div class ='content_right2'>\n";
+ 	$db = adodbConnect();
+ 	// query the DB for the 'DEF' enum for 2nd team
+ 	$queryD2 = "select AVG(Rating) from Players where Team_ID = '$team2' and Position = 'DEF'";
+ 	$result = $db -> Execute($queryD2);
+ 	while ($row = $result -> FetchRow())
+ 	{
+ 		$avgRate_D2 = $row['AVG(Rating)'];
+ 		print "Defensive Average: ";
+ 		print number_format($avgRate_D2 + 0, 1);  
+ 	} // end while
+ 	print "\n";
+ 	print "<p>\n";
+ 	print "</p>\n";
+ 	// query the DB for the 'ATT' enum for 2nd team
+ 	$queryA2 = "select AVG(Rating) from Players where Team_ID = '$team2' and Position = 'ATT'";
+ 	$result = $db -> Execute($queryA2);
+ 	while ($row = $result -> FetchRow())
+ 	{
+ 		$avgRate_A2 = $row['AVG(Rating)'];
+ 		print "Attacking Average: ";
+ 		print number_format($avgRate_A2 + 0, 1);  
+ 	} // end while
+ 	print "\n";
+ 	print "<p>\n";
+ 	print "</p>\n";
+ 	// query the DB for 'GK' enum for 2nd team
+ 	$queryG2 = "select Rating from Players where Team_ID = '$team2' and Position = 'GK'";
+ 	$result = $db -> Execute($queryG2);
+ 	while ($row = $result -> FetchRow())
+ 	{
+ 		$avgRate_G2 = $row['Rating'];
+ 		print "Goalkeeper: ";
+ 		print $avgRate_G2 + 0;  
+ 	} // end while
+ 	print "</div>\n";
+ 	print "</br>\n";
+ 	print "</br>\n";
+ 	print "</br>\n";
+ 	print "<div class = 'button_submit'>\n";
+ 	print "<p><input type = 'submit' value = 'Continue' name = 'Team_Stats_Cont'/>\n";
+	print "</p>\n";
+	print "</div>\n";
  	print "</form>\n";
  	print "</div>";
  	print "</div>";
- } // end wtf
+ } // end teamStats()
 
+ function playGame()
+ {
+ 	print "<div class = 'content'>\n";
+ 	print "<h1> Game Session </h1>\n";
+ 	print "<div class = 'content2'>\n";
+ 	print "<form method = 'post' enctype = 'multipart/form-data' action = '".$_SERVER ['PHP_SELF']."'>\n";
+ 	print "<p>Game is now playing\n";
+ 	print "</p>\n";
+ 	print "</form>\n";
+ 	print "</div>";
+ 	print "</div>";
+ }
  ?>
