@@ -310,15 +310,18 @@
  	print "<div class = 'content_game_session'>\n";
  	print "<p>Game is now playing...\n";
  	print "</p>\n";
- 	$minutes = range("1", "45", 3);
+ 	$minutes = range("2", "45", 3);
+ 	print "Kick off!\n";
  	foreach ($minutes as $minute) 
  	{
- 		$event = array("Goal!", "Yellow Card", "Uh-Oh: 2nd Yellow equals a Red", "Red Card", "Penalty: Goal!", "Penalty: Miss!",
- 		"TeamA has possession", "TeamB has possession");
+ 		$event = array("Shot from outside the box - Goal!", "Yellow Card", "Uh-Oh: 2nd Yellow equals a Red", "Red Card", "Penalty: Goal!", "Penalty: Miss!",
+ 		"TeamA has possession", "TeamB has possession", "Corner Kick", "Free Kick", "Header from inside the box - Goal!", "Easy tap in - Goal!", "Fine save from the Goalkeeper",
+ 		"Richochet off the woodwork! - Unlucky", "Easy catch for the Goalkeeper", "Beautiful throughball", "Switching the field", "Unstoppable shot into the upper 90 of the net - Goal!");
  		print '<pre>'; #<pre></pre> confuses browser to print array line by line
  		print_r($minute.'min'.' '.'-'.' '.$event[array_rand($event)]."\n");
  		print '</pre>';
  	} // end foreach loop
+ 	print "45min - End Half\n";
  	print "</div>";
  	print "<form method = 'post' enctype = 'multipart/form-data' action = '".$_SERVER ['PHP_SELF']."'>\n";
  	print "<div class = 'button_submit'>\n";
