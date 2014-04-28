@@ -1,6 +1,6 @@
 <?php
  //---------------Initiate session---------------//
- #session_start();
+ session_start();
  //---------------Document heading , style sheet, title--------------//
  require "classfun.php";   # gets functions we will use
  require "mydb.php"; # gets function we will use to connect to database
@@ -19,22 +19,24 @@
  }
  if ($_POST['Submit_Team'])
  {
- 	#$teamA = $_SESSION['Teams'];
- 	#$teamB = $_SESSION['Teams2'];
+ 	$_SESSION['Teams'] = $team;
+ 	$_SESSION['Teams2'] = $team2;
 	$team = $_POST['Teams'];
 	$team2 = $_POST['Teams2'];
 	viewPlayers($team, $team2);
  } // end if
  if ($_POST['Submit_Players'])
  {
- 	#$team = $_SESSION['Players'];
- 	#$team2 = $_SESSION['Players2'];
+ 	$_SESSION['Players'] = $team;
+ 	$_SESSION['Players2'] = $team2;
  	$team = $_POST['Players'];
  	$team2 = $_POST['Players2'];
  	teamStats($team, $team2);
  } // end if 
  if ($_POST['Team_Stats_Cont'])
  {
+ 	$_SESSION['Teams'] = $team;
+ 	$_SESSION['Teams2'] = $team2;
  	$team = $_POST['Teams'];
  	$team2 = $_POST['Teams2'];
 	playGame($team, $team2);
@@ -47,7 +49,7 @@
 
  //---------------------------Functions------------------------//
 
- function displayTime()
+ /*function displayTime()
  {
  	print "<div class = 'content'>\n";
  	print "<h1> Game Minutes: </h1>\n";
@@ -66,7 +68,8 @@
 	print "</form>\n";
 	print "</div>";
  } // end function displayTime()
- 
+ */
+
  // function will display home page along with an image
  function viewPage()
  {
@@ -258,6 +261,10 @@
  		print "Goalkeeper: ";
  		print $avgRate_G + 0;  
  	} // end while
+ 	print "\n";
+ 	print "<p>\n";
+ 	print "</p>\n";
+ 	print "Team Weight: ".number_format(($avgRate_D + $avgRate_A + $avgRate_G)*3 + 0, 1);
  	print "</div>\n";
 
  	//------------------2nd set of queries for 2nd team--------------//
@@ -297,7 +304,13 @@
  		print "Goalkeeper: ";
  		print $avgRate_G2 + 0;  
  	} // end while
+ 	print "\n";
+ 	print "<p>\n";
+ 	print "</p>\n";
+ 	print "Team Weight: ".number_format(($avgRate_D2 + $avgRate_A2 + $avgRate_G2)*3 + 0, 1);
  	print "</div>\n";
+ 	print "</br>\n";
+ 	print "</br>\n";
  	print "</br>\n";
  	print "</br>\n";
  	print "</br>\n";
@@ -318,24 +331,30 @@
  	print "<div class = 'content_game_session'>\n";
  	print "<p>Game is now playing...\n";
  	print "</p>\n";
- 	$minutes = range("2", "45", 3);
+ 	$minutes = range("2", "88", 2);
  	print "<p>Kick off!\n";
  	print "</p>\n";
  	foreach ($minutes as $minute) 
  	{
- 		#$output = str_replace($team, TeamA, $event);
+ 		$imageYC = 'yellowcard.jpg';
+ 		$imageRC = 'redcard.jpg';
+ 		$imagePK = 'pk.png';
+ 		$imagePKM = 'pkmiss.png';
+ 		$imageGoal = 'goal.png';
+ 		$imageFoul = 'foul.png';
+ 	
  		$event = array(
- 			"AC Milan has possession", 
+ 			"TeamA has possession", 
  			"Fiorentina has possession", 
  			"Corner kick - Fiorentina",
- 			"Corner kick - AC Milan", 
+ 			"Corner kick - TeamA", 
  			"Free kick over the wall",
  			"Free kick hits the wall", 
  			"Shot off the woodwork! - Unlucky", 
- 			"AC Milan is on the attack",
+ 			"TeamA is on the attack",
  			"Fiorentina is on the attack",
  			"Headed out of play", 
- 			"First class defending from AC Milan",
+ 			"First class defending from TeamA",
  			"First class defending from Fiorentina", 
  			"Defense stops the attack", 
  			"Pass is intercepted", 
@@ -343,37 +362,29 @@
  			"Defender clears the ball", 
  			"Ball goes out of play",
  			"Shot goes over the bar", 
- 			"Yellow Card - Fiorentina",
- 			"Yellow Card - AC Milan",
+ 			"<strong> Yellow Card - Fiorentina </strong>",
+ 			"<strong> Yellow Card - TeamA </strong> <img src ='$imageYC'>",
  			"Shot goes wide",
  			"Perfectly weighted pass",  
  			"Throw in - Fiorentina",
- 			"Throw in - AC Milan",
+ 			"Throw in - TeamA",
  			"Fine save from the Goalkeeper", 
  			"Easy catch for the Goalkeeper", 
  			"Great reflexes from the Goalkeeper",
  			"Goalkeeper saves his team with a fine save",
  			"Goalkeeper punches the ball out",
  			"Volley from outside the box!",
- 			"AC Milan is on the counter attack",
+ 			"TeamA is on the counter attack",
  			"Fiorentina is on the counter attack",
- 			"Offsides is called on AC Milan",
+ 			"Offsides is called on TeamA",
  			"Offsides is called on Fiorentina");
  		print '<pre>'; #<pre></pre> confuses browser to print array line by line
  		print_r($minute.'min'.' '.'-'.' '.$event[shuffle($event)]."\n");
  		print '</pre>';
- 		/*if ($event[shuffle($event)] == array("Goal! - AC Milan"))
- 		{
- 			print "AC Milan - 1 :: Fioretina - 0";
- 		} // end if
- 		else if ($event[shuffle($event)] == array("Goal! - Fioretina"))
- 		{	
- 			print "AC Milan - 0 :: Fiorentina - 1";
- 		} // end else if*/
  	} // end foreach loop
- 	print "<p>45min - End Half\n";
+ 	print "<p>90min - End Game\n";
  	print "</p>\n";
- 	print "<p>Half Time Score:\n";
+ 	print "<p>Full Time Score:\n";
  	print "</p>\n"; 
  	print "AC Milan 0 - Fiorentina 0\n";
  	print "</div>";
