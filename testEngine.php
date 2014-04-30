@@ -29,16 +29,24 @@
  {
  	$_SESSION['Players'] = $team;
  	$_SESSION['Players2'] = $team2;
+ 	$_SESSION['Team_Name'] = $desc;
+ 	$_SESSION['Team_Name2'] = $desc2;
  	$team = $_POST['Players'];
  	$team2 = $_POST['Players2'];
- 	teamStats($team, $team2);
+ 	$desc = $_POST['Team_Name'];
+ 	$desc2 = $_POST['Team_Name2'];
+ 	teamStats($team, $team2, $desc, $desc2);
  } // end if 
  if ($_POST['Team_Stats_Cont'])
  {
  	$_SESSION['Teams'] = $team;
  	$_SESSION['Teams2'] = $team2;
+ 	$_SESSION['Team_Name'] = $desc;
+ 	$_SESSION['Team_Name2'] = $desc2;
  	$team = $_POST['Teams'];
  	$team2 = $_POST['Teams2'];
+ 	$desc = $_POST['Team_Name'];
+ 	$desc2 = $_POST['Team_Name2'];
 	playGame($team, $team2);
  }
  else if ($_POST['Home'])
@@ -220,13 +228,15 @@
  // function is pased $team and $team variable as well
  // the variables determine the teams selected and alows for calculation of avgerages for specific team
  // averages include: defense, attacking, along with GK
- function teamStats($team, $team2)
+ function teamStats($team, $team2, $desc, $desc2)
  {
  	print "<div class = 'content'>\n";
  	print "<h1> Team Stats </h1>\n";
  	print "<div class = 'content_stats'>\n";
  	print "<div class = 'content_left2'>\n";
  	print "<form method = 'post' enctype = 'multipart/form-data' action = '".$_SERVER ['PHP_SELF']."'>\n";
+ 	print "<p>AC Milan";
+ 	print "</p>\n";
  	$db = adodbConnect();
  	// query the DB for the 'DEF' enum
  	$queryD = "select AVG(Rating) from Players where Team_ID = '$team' and Position = 'DEF'";
@@ -270,6 +280,8 @@
  	//------------------2nd set of queries for 2nd team--------------//
 
  	print "<div class ='content_right2'>\n";
+ 	print "<p>Palermo";
+ 	print "</p>\n";
  	$db = adodbConnect();
  	// query the DB for the 'DEF' enum for 2nd team
  	$queryD2 = "select AVG(Rating) from Players where Team_ID = '$team2' and Position = 'DEF'";
@@ -315,6 +327,9 @@
  	print "</br>\n";
  	print "</br>\n";
  	print "</br>\n";
+ 	print "</br>\n";
+ 	print "</br>\n";
+ 	print "</br>\n";
  	print "<div class = 'button_submit'>\n";
  	print "<p><input type = 'submit' value = 'Continue' name = 'Team_Stats_Cont'/>\n";
 	print "</p>\n";
@@ -329,64 +344,52 @@
  	print "<div class = 'content'>\n";
  	print "<h1> Game Session </h1>\n";
  	print "<div class = 'content_game_session'>\n";
- 	print "<p>Game is now playing...\n";
+ 	print "<p><strong>Game is now playing...\n</strong>";
  	print "</p>\n";
- 	$minutes = range("2", "88", 2);
- 	print "<p>Kick off!\n";
+ 	#$minutes = range("2", "88", 5);
+ 	print "<p><strong>Kick off! </strong> <img src ='$imageFoul'>\n";
  	print "</p>\n";
- 	foreach ($minutes as $minute) 
+
+ 	$imageYC = 'yellowcard.jpg';
+ 	$imageRC = 'redcard.jpg';
+ 	$imagePK = 'pk.png';
+ 	$imagePKM = 'pkmiss.png';
+ 	$imageGoal = 'goal.png';
+ 	$imageFoul = 'foul.png';
+
+ 	$event = array("6' <br/> Corner kick for AC Milan <br/> No luck for AC Milan",
+ 					"9' <br/> Attempt on goal for Palermo <br/> No luck for Palermo",
+ 					"12' <br/> Corner kick for AC Milan <br/> No luck for AC Milan",
+ 					"21' <br/> Cross into AC Milan box <br/> No luck for Palermo",
+ 					"30' <br/> Foul called on AC Milan <br/> <img src ='$imageYC'> AC Milan",
+ 					"32' <br/> Attempt on goal for Palermo <br/> Goal! Palermo scores! 
+ 					<br/> <img src ='$imageGoal'> Palermo <br/> AC Milan 0 - 1 Palermo",
+ 					"36' <br/> Attempt on goal for AC Milan <br/> No luck for AC Milan",
+ 					"39' <br/> Attempt on goal for AC Milan <br/> No luck for AC Milan",
+ 					"45' <br/> Half Time",
+ 					"48' <br/> Foul inside the box! <br/> <img src ='$imagePK'> Penalty Kick for AC Milan 
+ 					<br/> Goal! AC Milan scores! <br/> <img src ='$imageGoal'> AC Milan 
+ 					<br/> AC Milan 1 - 1 Palermo",
+ 					"54' <br/> Corner kick for Palermo <br/> No luck for Palermo",
+ 					"55' <br/> Foul called on Palermo <br/> <img src ='$imageYC'> Palermo",
+ 					"66' <br/> Corner kick for Palermo <br/> Goal! Palermo scores! 
+ 					<br/> <img src ='$imageGoal'> Palermo <br/> AC Milan 1 - 2 Palermo",
+ 					"71' <br/> Cross into Palermo box <br/> Goal! AC Milan scores! 
+ 					<br/> <img src='$imageGoal'> AC Milan <br/> AC Milan 2 - 2 Palermo",
+ 					"76' <br/> Attempt on goal for AC Milan </br> No luck for AC Milan",
+ 					"82' <br/> Corner kick for AC Milan <br/> No Luck for AC Milan",
+ 					"88' <br/> Foul called on AC Milan <br/> <img src ='$imageYC'> AC Milan",
+ 					"90' <br/> <img src ='$imageFoul'> Full Time");
+ 	$arrayLength = count($event);
+ 	for ($x = 0; $x < $arrayLength; $x++)
  	{
- 		$imageYC = 'yellowcard.jpg';
- 		$imageRC = 'redcard.jpg';
- 		$imagePK = 'pk.png';
- 		$imagePKM = 'pkmiss.png';
- 		$imageGoal = 'goal.png';
- 		$imageFoul = 'foul.png';
- 	
- 		$event = array(
- 			"TeamA has possession", 
- 			"Fiorentina has possession", 
- 			"Corner kick - Fiorentina",
- 			"Corner kick - TeamA", 
- 			"Free kick over the wall",
- 			"Free kick hits the wall", 
- 			"Shot off the woodwork! - Unlucky", 
- 			"TeamA is on the attack",
- 			"Fiorentina is on the attack",
- 			"Headed out of play", 
- 			"First class defending from TeamA",
- 			"First class defending from Fiorentina", 
- 			"Defense stops the attack", 
- 			"Pass is intercepted", 
- 			"Shot is blocked by the defender", 
- 			"Defender clears the ball", 
- 			"Ball goes out of play",
- 			"Shot goes over the bar", 
- 			"<strong> Yellow Card - Fiorentina </strong>",
- 			"<strong> Yellow Card - TeamA </strong> <img src ='$imageYC'>",
- 			"Shot goes wide",
- 			"Perfectly weighted pass",  
- 			"Throw in - Fiorentina",
- 			"Throw in - TeamA",
- 			"Fine save from the Goalkeeper", 
- 			"Easy catch for the Goalkeeper", 
- 			"Great reflexes from the Goalkeeper",
- 			"Goalkeeper saves his team with a fine save",
- 			"Goalkeeper punches the ball out",
- 			"Volley from outside the box!",
- 			"TeamA is on the counter attack",
- 			"Fiorentina is on the counter attack",
- 			"Offsides is called on TeamA",
- 			"Offsides is called on Fiorentina");
- 		print '<pre>'; #<pre></pre> confuses browser to print array line by line
- 		print_r($minute.'min'.' '.'-'.' '.$event[shuffle($event)]."\n");
- 		print '</pre>';
- 	} // end foreach loop
- 	print "<p>90min - End Game\n";
- 	print "</p>\n";
- 	print "<p>Full Time Score:\n";
+ 		print $event[$x];
+ 		print "<br/>\n";
+ 		print "<br/>\n";
+ 	}// end for loop
+ 	print "<p><strong>Full Time Score:</strong>\n";
  	print "</p>\n"; 
- 	print "AC Milan 0 - Fiorentina 0\n";
+ 	print "<strong>AC Milan 2 - 2 Palermo </strong>\n";
  	print "</div>";
  	print "<form method = 'post' enctype = 'multipart/form-data' action = '".$_SERVER ['PHP_SELF']."'>\n";
  	print "<div class = 'button_submit'>\n";
